@@ -1,4 +1,5 @@
-﻿using Exercise6.Models;
+﻿using System.Collections;
+using Exercise6.Models;
 
 namespace Exercise6
 {
@@ -344,7 +345,10 @@ namespace Exercise6
         /// </summary>
         public static int Task13(int[] arr)
         {
-            int result = 0;
+            int result = arr.GroupBy(n => n)
+                .Where(group => group.Count() % 2 != 0)
+                .Select(group => group.Key)
+                .First();;
             //result=
             return result;
         }
@@ -355,14 +359,19 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<Dept> Task14()
         {
-            IEnumerable<Dept> result = null;
-            //result =
+            IEnumerable<Dept> result = Depts.Where(dept => !Emps.Any(emp => emp.Deptno == dept.Deptno) || Emps.Count(emp => emp.Deptno == dept.Deptno) == 5)
+                .OrderBy(dept => dept.Dname);
             return result;
         }
     }
 
     public static class CustomExtensionMethods
     {
-        //Put your extension methods here
+        // public static IEnumerable<Emp> EmployeesWithSubordinates(this IEnumerable<Emp> employees)
+        // {
+        //     return employees.Where(emp => emp.Mgr.Any())
+        //                 .OrderBy(emp => emp.Ename)
+        //                 .ThenByDescending(emp => emp.Salary);
+        // }
     }
 }
