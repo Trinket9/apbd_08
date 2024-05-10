@@ -162,9 +162,10 @@ namespace Exercise6
         /// <summary>
         ///     SELECT * FROM Emps WHERE Job = "Backend programmer";
         /// </summary>
-        public static IEnumerable<Emp> Task1()
-        {
-            IEnumerable<Emp> result = null;
+        public static IEnumerable<Emp> Task1() {
+            IEnumerable<Emp> result = from emp in Emps
+                where emp.Job == "Backend programmer"
+                select emp;
             return result;
         }
 
@@ -173,7 +174,10 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<Emp> Task2()
         {
-            IEnumerable<Emp> result = null;
+            IEnumerable<Emp> result = from emp in Emps
+                where emp.Job == "Frontend programmer" && emp.Salary > 1000
+                orderby emp.Ename descending
+                select emp;
             return result;
         }
 
@@ -183,7 +187,8 @@ namespace Exercise6
         /// </summary>
         public static int Task3()
         {
-            int result = 0;
+            int result = (from emp in Emps
+                    select emp.Salary).Max();
             return result;
         }
 
@@ -192,7 +197,11 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<Emp> Task4()
         {
-            IEnumerable<Emp> result = null;
+            int maxSal = (from emp in Emps
+                select emp.Salary).Max();
+            IEnumerable<Emp> result = from emp in Emps 
+                where emp.Salary == maxSal 
+                select emp;
             return result;
         }
 
@@ -201,7 +210,11 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<object> Task5()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = from emp in Emps
+                select new {
+                    Nazwisko = emp.Ename,
+                    Praca = emp.Job
+                };
             return result;
         }
 
@@ -212,7 +225,14 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<object> Task6()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = from emp in Emps
+                join dept in Depts on emp.Deptno equals dept.Deptno
+                select new
+                {
+                    emp.Ename,
+                    emp.Job,
+                    dept.Dname
+                };;
             return result;
         }
 
@@ -221,7 +241,13 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<object> Task7()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = from emp in Emps
+                group emp by emp.Job into jobGroup
+                select new
+                {
+                    Praca = jobGroup.Key,
+                    LiczbaPracownikow = jobGroup.Count()
+                };;
             return result;
         }
 
@@ -231,7 +257,9 @@ namespace Exercise6
         /// </summary>
         public static bool Task8()
         {
-            bool result = false;
+            bool result = (from emp in Emps
+                where emp.Job == "Backend programmer"
+                select emp).Any();
             return result;
         }
 
@@ -241,7 +269,10 @@ namespace Exercise6
         /// </summary>
         public static Emp Task9()
         {
-            Emp result = null;
+            Emp result = (from emp in Emps
+                where emp.Job == "Frontend programmer"
+                orderby emp.HireDate descending
+                select emp).FirstOrDefault();;
             return result;
         }
 
