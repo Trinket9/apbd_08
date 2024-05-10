@@ -283,7 +283,19 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<object> Task10()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> employeeDetails = from emp in Emps
+                select new {
+                    Name = emp.Ename, 
+                    Job = emp.Job, 
+                    HireDate = emp.HireDate
+                };
+
+            IEnumerable<object> nulls = from emp in Emps
+                select new {
+                    Ename = "No value", Job = (string)null, HireDate = (DateTime?)null
+                };
+
+            IEnumerable<object> result = employeeDetails.Concat(nulls);
             return result;
         }
 
@@ -300,7 +312,13 @@ namespace Exercise6
         /// </summary>
         public static IEnumerable<object> Task11()
         {
-            IEnumerable<object> result = null;
+            IEnumerable<object> result = from emp in Emps
+                group emp by emp.Deptno into deptGroup
+                where deptGroup.Count() > 1
+                select new {
+                    name = Depts.First(d => d.Deptno == deptGroup.Key).Dname,
+                    numOfEmployees = deptGroup.Count()
+                };;
             return result;
         }
 
